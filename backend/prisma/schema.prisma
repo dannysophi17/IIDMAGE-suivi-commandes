@@ -1,0 +1,134 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  OWNER
+  MANAGER
+  POSEUR
+  READONLY
+}
+
+enum PlanningType {
+  AUTO
+  CASUAL
+}
+
+enum NotificationKind {
+  SURVEY
+  PRODUCTION
+  EXPEDITION
+  LIVRAISON
+  POSE
+}
+
+enum NotificationChannel {
+  EMAIL
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  phone     String?
+  password  String
+  role      Role     @default(MANAGER)
+  createdAt DateTime @default(now())
+}
+
+model Client {
+  id        String    @id @default(uuid())
+  name      String
+  email     String?
+  phone     String?
+  address   String?
+  notes     String?
+  favorite  Boolean   @default(false)
+  commandes Commande[]
+}
+
+model Poseur {
+  id           String    @id @default(uuid())
+  name         String
+  email        String?
+  phone        String?
+  zone         String?
+  availability Boolean  @default(true)
+  commandes    Commande[]
+}
+
+model Commande {
+  id               String      @id @default(uuid())
+  client           Client      @relation(fields: [clientId], references: [id])
+  clientId         String
+  poseur           Poseur?     @relation(fields: [poseurId], references: [id])
+  poseurId         String?
+  product          String?
+  planningType     PlanningType @default(CASUAL)
+  date_commande    DateTime?
+  date_survey      DateTime?
+  date_production  DateTime?
+  date_expedition  DateTime?
+  date_livraison   DateTime?
+  date_pose        DateTime?
+  done_production_at DateTime?
+  done_expedition_at DateTime?
+  done_livraison_at  DateTime?
+  done_pose_at       DateTime?
+  lieu_pose        String?
+  etat             String?
+  priorite         Int?
+  commentaires     String?
+  attachments      Attachment[]
+  notifications    Notification[]
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+}
+
+model Notification {
+  id         String             @id @default(uuid())
+  commande   Commande           @relation(fields: [commandeId], references: [id], onDelete: Cascade)
+  commandeId String
+  kind       NotificationKind
+  channel    NotificationChannel @default(EMAIL)
+  dueAt      DateTime
+  status     NotificationStatus  @default(PENDING)
+  sentAt     DateTime?
+  lastError  String?
+  actorEmail String?
+  createdAt  DateTime            @default(now())
+
+  @@unique([commandeId, kind, channel, dueAt])
+  @@index([status, dueAt])
+}
+
+model Attachment {
+  id         String   @id @default(uuid())
+  url        String
+  type       String?
+  uploadedBy  String?
+  commande   Commande @relation(fields: [commandeId], references: [id])
+  commandeId String
+  createdAt  DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  entity    String
+  entityId  String
+  userId    String?
+  action    String
+  changes   Json?
+  createdAt DateTime @default(now())
+}
