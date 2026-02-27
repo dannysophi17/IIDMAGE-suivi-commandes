@@ -575,6 +575,14 @@ export default function CalendrierPage() {
               const holiday = holidayName(date)
               const weekend = isWeekend(date)
 
+              const dayTitle = `${holiday ? `Férié: ${holiday} • ` : ''}${weekend ? 'Week-end • ' : ''}${events.length ? `${events.length} événement(s)` : 'Aucun événement'}`
+              const dayAriaLabel = `${date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })} • ${dayTitle}`
+              const dayClassName = `text-left rounded-xl border p-1.5 sm:p-2 transition active:scale-[0.99] ${
+                isSelected
+                  ? 'border-[color:var(--brand-ink)] ring-2 ring-gray-200 bg-gray-50/50'
+                  : 'border-gray-200 hover:bg-gray-50'
+              } ${(weekend || holiday) && !isSelected ? 'bg-gray-100 border-gray-300' : ''} ${!inMonth ? 'opacity-60' : ''}`
+
               const now = new Date()
               const worst = (() => {
                 if (!events.length) return 'PLANNED' as DayDotStatus
@@ -597,20 +605,8 @@ export default function CalendrierPage() {
                   .sort((a, b) => rank[b] - rank[a])[0]
               })()
 
-              return (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => setSelected(date)}
-                  aria-pressed={isSelected}
-                  className={`text-left rounded-xl border p-1.5 sm:p-2 transition active:scale-[0.99] ${
-                    isSelected
-                      ? 'border-[color:var(--brand-ink)] ring-2 ring-gray-200 bg-gray-50/50'
-                      : 'border-gray-200 hover:bg-gray-50'
-                  } ${(weekend || holiday) && !isSelected ? 'bg-gray-100 border-gray-300' : ''} ${!inMonth ? 'opacity-60' : ''}`}
-                  title={`${holiday ? `Férié: ${holiday} • ` : ''}${weekend ? 'Week-end • ' : ''}${events.length ? `${events.length} événement(s)` : 'Aucun événement'}`}
-                  aria-label={`${date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })} • ${holiday ? `Férié: ${holiday} • ` : ''}${weekend ? 'Week-end • ' : ''}${events.length ? `${events.length} événement(s)` : 'Aucun événement'}`}
-                >
+              const dayContent = (
+                <>
                   <div className={`flex items-center justify-between gap-2 ${weekend || holiday ? 'bg-gray-50 rounded-lg px-1 py-0.5 -mx-1 -my-0.5' : ''}`}>
                     <div className={`text-sm font-semibold ${inMonth ? 'text-gray-900' : 'text-gray-700'}`}>{date.getDate()}</div>
                     {isToday && (
@@ -636,6 +632,32 @@ export default function CalendrierPage() {
                       <span className="text-xs text-gray-400">—</span>
                     )}
                   </div>
+                </>
+              )
+
+              return isSelected ? (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setSelected(date)}
+                  aria-pressed="true"
+                  className={dayClassName}
+                  title={dayTitle}
+                  aria-label={dayAriaLabel}
+                >
+                  {dayContent}
+                </button>
+              ) : (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setSelected(date)}
+                  aria-pressed="false"
+                  className={dayClassName}
+                  title={dayTitle}
+                  aria-label={dayAriaLabel}
+                >
+                  {dayContent}
                 </button>
               )
             })}
