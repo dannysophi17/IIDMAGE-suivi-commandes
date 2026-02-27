@@ -1,0 +1,141 @@
+@import './theme.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: var(--font-main);
+  background: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color 260ms ease, color 260ms ease;
+}
+
+html {
+  transition: background-color 260ms ease, color 260ms ease;
+}
+
+html {
+  color-scheme: light;
+}
+
+/* Global micro-interactions (reusable) */
+@keyframes ui-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ui-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ui-drawer-in {
+  from {
+    transform: translateX(-12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes ui-drawer-out {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-12px);
+    opacity: 0;
+  }
+}
+
+.anim-overlay-in {
+  animation: ui-fade-in 160ms ease-out;
+}
+
+.anim-page-in {
+  animation: ui-fade-up 360ms cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+.anim-drawer-in {
+  animation: ui-drawer-in 260ms cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+.anim-drawer-out {
+  animation: ui-drawer-out 220ms ease-in;
+}
+
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shine::after {
+  content: '';
+  position: absolute;
+  top: -40%;
+  left: -60%;
+  width: 40%;
+  height: 180%;
+  background: linear-gradient(90deg, transparent, var(--brand-accent-soft), transparent);
+  transform: translateX(0) skewX(-12deg);
+  opacity: 0;
+  transition: opacity 180ms ease;
+  pointer-events: none;
+}
+
+.btn-shine:hover::after {
+  opacity: 1;
+  animation: btn-shine-move 520ms ease-out;
+}
+
+@keyframes btn-shine-move {
+  from {
+    transform: translateX(0) skewX(-12deg);
+  }
+  to {
+    transform: translateX(420%) skewX(-12deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body {
+    transition: none;
+  }
+
+  .anim-overlay-in,
+  .anim-page-in,
+  .anim-drawer-in,
+  .anim-drawer-out {
+    animation: none;
+  }
+
+  .btn-shine::after {
+    animation: none;
+    transition: none;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-title);
+}
+
+/* Login background pattern (avoid inline styles) */
+.iidmage-login-left-pattern {
+  background-image:
+    linear-gradient(135deg, rgba(199, 162, 74, 0.22) 0%, rgba(199, 162, 74, 0) 55%),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.06));
+}

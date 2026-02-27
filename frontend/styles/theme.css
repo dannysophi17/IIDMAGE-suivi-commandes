@@ -1,0 +1,33 @@
+:root {
+  /* Brand (corporate) */
+  --brand-ink: #111827; /* charcoal */
+  --brand-ink-hover: #0b1220;
+  --brand-accent: #c7a24a; /* gold */
+  --brand-accent-hover: #b68f2a;
+  --brand-accent-soft: #fff7df;
+  --brand-accent-border: #f0e0b0;
+  --brand-focus: rgba(199, 162, 74, 0.35);
+
+  /* Buttons (CTA) */
+  --brand-btn-bg: #111827;
+  --brand-btn-hover: #0b1220;
+  --brand-btn-fg: #ffffff;
+  --brand-btn-border: rgba(17, 24, 39, 0.08);
+
+  /* App tokens */
+  --color-primary: var(--brand-ink);
+  --color-accent: var(--brand-accent);
+
+  --color-bg: #f8fafc; /* fondo claro */
+  --color-surface: #ffffff;
+  --color-text: #0f172a;
+  --color-muted: #64748b;
+  --color-border: #e5e7eb;
+
+  --color-error: #ef4444;
+  --color-success: #22c55e;
+  --color-gray: #64748b;
+  --color-gray-light: #e5e7eb;
+  --font-main: 'Inter', 'Segoe UI', Arial, sans-serif;
+  --font-title: 'Montserrat', 'Inter', 'Segoe UI', Arial, sans-serif;
+}
