@@ -168,7 +168,7 @@ function upsertTaggedLine(base: string | undefined, tag: string, value: string) 
 
 export default function CommandesPage() {
   const router = useRouter()
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:4000')
   const [commandes, setCommandes] = useState<Commande[]>([])
   const [clients, setClients] = useState<Client[]>([])
   const [poseurs, setPoseurs] = useState<Poseur[]>([])
@@ -626,7 +626,7 @@ export default function CommandesPage() {
 
           <div>
             <label className="block text-xs text-gray-500">Date commande *</label>
-            <input className={CONTROL} type="date" title="Date commande" value={form.date_commande||''} onChange={e=>setForm((f:any)=>({...f,date_commande:e.target.value}))} required />
+            <input className={CONTROL} type="date" lang="fr" title="Date commande" value={form.date_commande||''} onChange={e=>setForm((f:any)=>({...f,date_commande:e.target.value}))} required />
             {computed?.date_commande && !manualOpen && !form.date_commande ? (
               <button
                 type="button"
@@ -641,7 +641,7 @@ export default function CommandesPage() {
 
           <div>
             <label className="block text-xs text-gray-500">Date pose (final) *</label>
-            <input className={CONTROL} type="date" title="Date pose" value={form.date_pose||''} onChange={e=>setForm((f:any)=>({...f,date_pose:e.target.value}))} required />
+            <input className={CONTROL} type="date" lang="fr" title="Date pose" value={form.date_pose||''} onChange={e=>setForm((f:any)=>({...f,date_pose:e.target.value}))} required />
             {(() => {
               const a = parseISODate(form.date_commande)
               const b = parseISODate(form.date_pose)
@@ -704,17 +704,17 @@ export default function CommandesPage() {
 
                 <div>
                   <label className="block text-xs text-gray-500">Mise en production (date)</label>
-                  <input className={CONTROL} type="date" title="Date production" value={form.date_production||''} onChange={e=>setForm((f:any)=>({...f,date_production:e.target.value}))} />
+                  <input className={CONTROL} type="date" lang="fr" title="Date production" value={form.date_production||''} onChange={e=>setForm((f:any)=>({...f,date_production:e.target.value}))} />
                 </div>
 
                 <div>
                   <label className="block text-xs text-gray-500">Expédition (date)</label>
-                  <input className={CONTROL} type="date" title="Date expédition" value={form.date_expedition||''} onChange={e=>setForm((f:any)=>({...f,date_expedition:e.target.value}))} />
+                  <input className={CONTROL} type="date" lang="fr" title="Date expédition" value={form.date_expedition||''} onChange={e=>setForm((f:any)=>({...f,date_expedition:e.target.value}))} />
                 </div>
 
                 <div>
                   <label className="block text-xs text-gray-500">Livraison (date)</label>
-                  <input className={CONTROL} type="date" title="Date livraison" value={form.date_livraison||''} onChange={e=>setForm((f:any)=>({...f,date_livraison:e.target.value}))} />
+                  <input className={CONTROL} type="date" lang="fr" title="Date livraison" value={form.date_livraison||''} onChange={e=>setForm((f:any)=>({...f,date_livraison:e.target.value}))} />
                 </div>
 
                 <div className="md:col-span-2">

@@ -29,6 +29,25 @@ function Icon({ children }: { children: React.ReactNode }) {
   return <span className="inline-flex items-center justify-center w-5 h-5">{children}</span>
 }
 
+function BrandLogo({ variant = 'sidebar' }: { variant?: 'sidebar' | 'sidebarCollapsed' | 'mobileHeader' | 'mobileDrawer' }) {
+  const [failed, setFailed] = useState(false)
+
+  const className =
+    variant === 'sidebar'
+      ? 'h-10 w-auto max-w-[160px] object-contain'
+      : variant === 'sidebarCollapsed'
+        ? 'h-10 w-10 object-contain'
+        : variant === 'mobileHeader'
+          ? 'h-7 w-auto max-w-[180px] object-contain'
+          : 'h-9 w-auto max-w-[180px] object-contain'
+
+  if (failed) {
+    return <div className="h-10 w-10 rounded-xl bg-gray-900/5 border border-gray-200" aria-hidden />
+  }
+
+  return <img src="/logo.png" alt="Logo" className={className} onError={() => setFailed(true)} />
+}
+
 function NavLink({
   href,
   label,
@@ -61,7 +80,7 @@ function NavLink({
 }
 
 export default function AppShell({ title, children, hideSidebarToggle = false }: AppShellProps) {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:4000')
 
   const [me, setMe] = useState<Me | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -194,7 +213,7 @@ export default function AppShell({ title, children, hideSidebarToggle = false }:
     Router.push(path)
   }
 
-  const showSidebarLogo = sidebarOpen || hideSidebarToggle
+  const showSidebarLogo = true
 
   const iconBtnClass =
     'inline-flex items-center justify-center min-w-[44px] min-h-[44px] h-10 w-10 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 hover:text-gray-900 transition active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-[color:var(--brand-focus)]'
@@ -212,14 +231,15 @@ export default function AppShell({ title, children, hideSidebarToggle = false }:
           >
             <div className={`p-4 flex items-center ${sidebarOpen ? 'justify-between' : 'justify-center'}`}>
               {showSidebarLogo && (
-                <div className="flex items-center gap-3">
-                  <div className="h-9 w-9 rounded-xl bg-gray-900/5 border border-gray-200" title="iiDmage" />
-                  {sidebarOpen && (
+                <div className="flex items-center gap-3 mt-1">
+                  {sidebarOpen ? (
                     <div
-                      className={`font-extrabold tracking-tight text-gray-900 text-xl overflow-hidden whitespace-nowrap ${sidebarInitialized ? 'transition-all duration-300' : ''} ${sidebarOpen ? 'max-w-[160px] opacity-100' : 'max-w-0 opacity-0'}`}
+                      className={`overflow-hidden whitespace-nowrap ${sidebarInitialized ? 'transition-all duration-300' : ''} ${sidebarOpen ? 'max-w-[160px] opacity-100' : 'max-w-0 opacity-0'}`}
                     >
-                      iiDmage
+                      <BrandLogo variant="sidebar" />
                     </div>
+                  ) : (
+                    <BrandLogo variant="sidebarCollapsed" />
                   )}
                 </div>
               )}
@@ -403,7 +423,9 @@ export default function AppShell({ title, children, hideSidebarToggle = false }:
                   <path d="M4 18h16" />
                 </svg>
               </button>
-              <div className="font-extrabold tracking-tight text-gray-900">iiDmage</div>
+              <div className="flex items-center justify-center">
+                <BrandLogo variant="mobileHeader" />
+              </div>
               <div className="flex items-center gap-2">
                 <button onClick={logout} className={iconBtnClass} title="Déconnexion" aria-label="Déconnexion" type="button">
                   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -426,8 +448,10 @@ export default function AppShell({ title, children, hideSidebarToggle = false }:
                     mobileMenuClosing ? 'anim-drawer-out' : 'anim-drawer-in'
                   }`}
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="font-extrabold tracking-tight text-gray-900">iiDmage</div>
+                  <div className="flex items-center justify-between mt-1">
+                    <div className="flex items-center">
+                      <BrandLogo variant="mobileDrawer" />
+                    </div>
                     <button onClick={closeOverlays} className={iconBtnClass} title="Fermer" aria-label="Fermer" type="button">
                       <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M18 6L6 18" />

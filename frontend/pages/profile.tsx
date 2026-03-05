@@ -18,7 +18,7 @@ function authFetch(input: RequestInfo, init?: RequestInit) {
 }
 
 export default function ProfilePage() {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:4000')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')

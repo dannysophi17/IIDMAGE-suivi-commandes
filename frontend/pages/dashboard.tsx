@@ -215,7 +215,7 @@ function etatDisplay(value: string) {
 }
 
 export default function DashboardPage() {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:4000')
   const [me, setMe] = useState<Me | null>(null)
   const [commandes, setCommandes] = useState<Commande[]>([])
   const [loading, setLoading] = useState(true)

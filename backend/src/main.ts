@@ -23,6 +23,9 @@ declare global {
 const app = express();
 const prisma = new PrismaClient();
 
+// Behind reverse proxies (Caddy/Nginx) in production
+app.set('trust proxy', true);
+
 app.use(
   cors({
     origin: (process.env.CORS_ORIGIN || 'http://localhost:3000').split(','),

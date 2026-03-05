@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import Router from 'next/router';
 
 export default function Login() {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:4000');
   const [mounted, setMounted] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
   const [email, setEmail] = useState('');

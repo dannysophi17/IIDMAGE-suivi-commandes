@@ -19,7 +19,7 @@ function authFetch(input: RequestInfo, init?: RequestInit) {
 
 export default function ClientsPage() {
   const router = useRouter()
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:4000')
   const [clients, setClients] = useState<Client[]>([])
   const [form, setForm] = useState({ name: '', email: '', phone: '', address: '', notes: '' })
   const [loading, setLoading] = useState(true)
